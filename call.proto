@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+message Variant
+{
+    message PrimitiveValue
+    {
+        oneof value
+        {
+            bool bool_ = 1;
+            int32 int_ = 2;
+            double double_ = 3;
+            string string_ = 4;
+        }
+        bool empty = 5;
+    }
+    message Vector
+    {
+        repeated PrimitiveValue values = 1;
+    }
+    message Matrix
+    {
+        repeated Vector values = 1;
+    }
+    enum Type
+    {
+        BOOL = 0;
+        INT = 1;
+        DOUBLE = 2;
+        STRING = 3;
+        DATE = 4;  
+        OBJ = 5; 
+        VECTOR_BOOL= 6;   
+        VECTOR_DOUBLE= 7;  
+        VECTOR_STRING= 8;  
+        VECTOR_DATE= 9;  
+        VECTOR_OBJ= 10; 
+        VECTOR_MIX= 11;  
+        MATRIX_BOOL= 12;   
+        MATRIX_INT= 13;  
+        MATRIX_DOUBLE= 14;  
+        MATRIX_STRING= 15;  
+        MATRIX_DATE= 16;  
+        MATRIX_OBJ= 17;  
+        MATRIX_MIX= 18;  
+    }
+    oneof value
+    {
+        PrimitiveValue single = 1;
+        Vector vector = 2;
+        Matrix matrix = 3;
+    }
+    Type type = 4;
+}
+
+message Request
+{
+    string module = 1;
+    string method = 2;
+    string session = 3;
+    string uuid = 4;
+    repeated Variant args = 5;
+    bool async = 6;
+}
+
+message Result
+{
+    enum Status
+    {
+        FAILED = 0;
+        INPROCESS = 1;
+        SUCCESS = 2;
+    }
+    string uuid = 1;
+    Status status = 2;
+    Variant value = 3;
+    string log = 4;
+}
